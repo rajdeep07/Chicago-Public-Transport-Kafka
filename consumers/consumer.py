@@ -39,7 +39,7 @@ class KafkaConsumer:
         self.broker_properties = {
             'bootstrap.servers': 'PLAINTEXT://localhost:9094',
             'group.id': topic_name_pattern,
-            'default.topic.config': {'auto.offset.reset': 'earliest'}
+            'auto.offset.reset': 'earliest'
         }
 
         # TODO: Create the Consumer, using the appropriate type.
@@ -53,8 +53,12 @@ class KafkaConsumer:
 
     def on_assign(self, consumer, partitions):
         """Callback for when topic assignment takes place"""
+        logger.info("on_assign completed.")
         for partition in partitions:
-            consumer.seek(partition)
+            if self.offset_earliest is True:
+                partition.offset = confluent_kafka.OFFSET_BEGINNING
+#            consumer.seek(partition)
+
         logger.info("partitions assigned for %s", self.topic_name_pattern)
         consumer.assign(partitions)
 

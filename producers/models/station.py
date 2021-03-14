@@ -27,13 +27,13 @@ class Station(Producer):
             .replace("'", "")
         )
 
-        topic_name = f"{station_name}"
+        topic_name = f"station_name_{station_name}"
         super().__init__(
             topic_name,
             key_schema=Station.key_schema,
             value_schema=Station.value_schema,
-            num_partitions=2,
-            num_replicas=2,
+            num_partitions=1,
+            num_replicas=1,
         )
 
         self.station_id = int(station_id)
